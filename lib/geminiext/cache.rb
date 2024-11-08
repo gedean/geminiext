@@ -37,8 +37,13 @@ module GeminiExt
       response = conn.get("/v1beta/cachedContents") do |req|
         req.params['key'] = ENV.fetch('GEMINI_API_KEY')
       end
+      
+      JSON.parse(response.body)['cachedContents'].map do |item|
+        def item.delete = GeminiExt::Cache.delete(name: self['name'])
+        def item.set_ttl(ttl = 120) = GeminiExt::Cache.update(name: self['name'], content: { ttl: "#{ttl}s" })
+        item
+      end
 
-      JSON.parse(response.body)
     rescue Faraday::Error => e
       raise "Erro na requisição: #{e.message}"
     end
@@ -51,7 +56,7 @@ module GeminiExt
 
       response = conn.patch("/v1beta/#{name}") do |req|
         req.params['key'] = ENV.fetch('GEMINI_API_KEY')
-        req.body = content
+        req.body = content.to_json
       end
 
       return JSON.parse(response.body) if response.status == 200
