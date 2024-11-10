@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name          = 'geminiext'
-  s.version       = '0.0.3'
-  s.date          = '2024-11-07'
+  s.version       = '0.0.7'
+  s.date          = '2024-11-08'
   s.platform      = Gem::Platform::RUBY
   s.summary       = 'Ruby Gemini Extended'
   s.description   = 'Based on gemini-ai, adds some extra features'
