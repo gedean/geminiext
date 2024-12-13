@@ -56,13 +56,16 @@ module GeminiExt
           conn = Faraday.new(
             url: 'https://generativelanguage.googleapis.com',
             headers: { 'Content-Type' => 'application/json' }
-          )
+          ) do |f|
+            f.options.timeout = 300        # timeout em segundos para a requisição completa
+            f.options.open_timeout = 300   # timeout em segundos para abrir a conexão
+          end
 
           response = conn.post("/v1beta/models/#{self['model'].split('/').last}:generateContent") do |req|
             req.params['key'] = ENV.fetch('GEMINI_API_KEY')
             req.body = {
-              contents:,
-              cached_content: self['name']
+              cached_content: self['name'],
+              contents:
             }.to_json
           end
           
@@ -77,7 +80,7 @@ module GeminiExt
           raise "Erro na requisição: #{e.message}"
         end
         
-        def item.single_prompt(prompt) = generate_content(contents: [{ parts: [{ text: prompt }], role: 'user' }])
+        def item.single_prompt(prompt: ) = generate_content(contents: [{ parts: [{ text: prompt }], role: 'user' }])
 
         item
       end

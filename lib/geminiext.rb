@@ -12,7 +12,6 @@ module Geminiext
     Gemini.new(load_config(model: model))
   end
  
-
   def self.load_config(model: 'gemini-1.5-flash-8b')
     {
       credentials: {
